@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Caixa de pesquisa dinâmica</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+            $('#search-box').keyup(function() {
+                  var searchTerm = $('#search-box').val();
+                  if (searchTerm.trim() === '') { // Verifica se o valor da pesquisa está vazio
+                    $('#search-results').empty(); // Limpa a lista de resultados
+                    $('#search-results').append(' <li>Nenhum resultado encontrado. </li>'); // Exibe uma mensagem de aviso
+                      return;
+                    }
+                    $.ajax({
+                      type: "POST",
+                      url: "/search",
+                      data: {
+                        'search': searchTerm
+                      },
+                      success: function(results) {
+                        $('#search-results').empty();
+                        if (results.length === 0) { // Verifica se não há resultados
+                          $('#search-results').append(' <li> Nenhum resultado encontrado. </li>'); // Exibe uma mensagem de aviso
+                            return;
+                          }
+                          $.each(results, function(i, result) {
+                              $('#search-results').append(' <li> <a href = "' + result + '" > ' + result + ' </a> </li>');
+                              });
+                          }
+                        });
+                    });
+                  });
+    </script>
+  </head>
+  <body>
+    <label for="search-box">Pesquisar:</label>
+    <input type="text" id="search-box" name="search-box">
+    <ul id="search-results"></ul>
+  </body>
+</html>

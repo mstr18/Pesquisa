@@ -3,34 +3,78 @@
   <head>
     <title>Caixa de pesquisa dinâmica</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+      /* Estilo para a caixa de pesquisa */
+      #search-box {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        width: 300px;
+        margin-bottom: 20px;
+      }
+
+      /* Estilo para a lista de resultados */
+      #search-results {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Estilo para cada resultado */
+      #search-results li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+
+      /* Estilo para o link em cada resultado */
+      #search-results li a {
+        color: #333;
+        text-decoration: none;
+      }
+
+      /* Estilo para o link em cada resultado quando hover */
+      #search-results li a:hover {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      /* Estilo para a mensagem de aviso quando não há resultados */
+      .no-results {
+        font-size: 16px;
+        font-weight: bold;
+        color: #f00;
+        margin-top: 10px;
+      }
+    </style>
     <script type="text/javascript">
       $(document).ready(function() {
-            $('#search-box').keyup(function() {
-                  var searchTerm = $('#search-box').val();
-                  if (searchTerm.trim() === '') { // Verifica se o valor da pesquisa está vazio
-                    $('#search-results').empty(); // Limpa a lista de resultados
-                    $('#search-results').append(' <li>Nenhum resultado encontrado. </li>'); // Exibe uma mensagem de aviso
-                      return;
-                    }
-                    $.ajax({
-                      type: "POST",
-                      url: "/search",
-                      data: {
-                        'search': searchTerm
-                      },
-                      success: function(results) {
-                        $('#search-results').empty();
-                        if (results.length === 0) { // Verifica se não há resultados
-                          $('#search-results').append(' <li> Nenhum resultado encontrado. </li>'); // Exibe uma mensagem de aviso
-                            return;
-                          }
-                          $.each(results, function(i, result) {
-                              $('#search-results').append(' <li> <a href = "' + result + '" > ' + result + ' </a> </li>');
-                              });
-                          }
-                        });
-                    });
-                  });
+        $('#search-box').keyup(function() {
+          var searchTerm = $('#search-box').val();
+          if (searchTerm.trim() === '') { // Verifica se o valor da pesquisa está vazio
+            $('#search-results').empty(); // Limpa a lista de resultados
+            $('#search-results').append('<li class="no-results">Nenhum resultado encontrado.</li>'); // Exibe uma mensagem de aviso
+            return;
+          }
+          $.ajax({
+            type: "POST",
+            url: "/search",
+            data: {
+              'search': searchTerm
+            },
+            success: function(results) {
+              $('#search-results').empty();
+              if (results.length === 0) { // Verifica se não há resultados
+                $('#search-results').append('<li class="no-results">Nenhum resultado encontrado.</li>'); // Exibe uma mensagem de aviso
+                return;
+              }
+              $.each(results, function(i, result) {
+                $('#search-results').append('<li><a href="' + result + '">' + result + '</a></li>');
+              });
+            }
+          });
+        });
+      });
     </script>
   </head>
   <body>

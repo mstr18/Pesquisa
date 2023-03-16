@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 def page(result):
     # Aqui você pode usar o resultado para gerar a página desejada
-    return f'<h1>Página para o resultado {result}</h1>'
-
+    return f'<h1>Página para o resultado: {result}</h1>'
+ 
 
 @app.route('/')
 def index():
